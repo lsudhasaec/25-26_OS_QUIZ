@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Operating Systems MCQ Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+    .quiz-box { background: white; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: #333; }
+    .question { font-weight: bold; margin-bottom: 10px; }
+    .option { margin: 8px 0; }
+    button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    .next-btn { background: #4CAF50; color: white; }
+    .result { font-size: 1.2em; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="quiz-box">
+  <h2>Operating Systems MCQ Quiz</h2>
+  <div id="quiz-container">
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <br>
+    <button class="next-btn" onclick="nextQuestion()">Next</button>
+    <br><br>
+    <div class="result" id="result"></div>
+  </div>
+</div>
+<script>
+const quizData = [
+  { q: "Which of the following is not a function of an operating system?", options: ["Memory management","Process scheduling","Data encryption in hardware","I/O management"], answer: 2 },
+  { q: "Which type of OS executes multiple jobs by switching among them?", options: ["Batch OS","Time-sharing OS","Real-time OS","Embedded OS"], answer: 1 },
+  { q: "The part of the OS that interacts directly with hardware is called:", options: ["Kernel","Shell","Application","API"], answer: 0 },
+  { q: "The state of a process is defined by:", options: ["Process ID only","Program code in memory","Contents of CPU registers, program counter, and memory info","Stack only"], answer: 2 },
+  { q: "Which of the following is not a valid process state?", options: ["Ready","Running","Waiting","Loading"], answer: 3 },
+  { q: "Deadlock can occur when:", options: ["Resources are non-preemptive and processes are competing for them","All processes are running in parallel","There is only one process in the system","Processes share no resources"], answer: 0 },
+  { q: "Which is not one of Coffman’s conditions?", options: ["Mutual exclusion","Hold and wait","Circular wait","Time sharing"], answer: 3 },
+  { q: "Banker's Algorithm is used for:", options: ["Deadlock prevention","Deadlock avoidance","Deadlock detection","Deadlock recovery"], answer: 1 },
+  { q: "In a RAG, a cycle means:", options: ["Always deadlock","Deadlock only if one instance per resource","Never deadlock","None"], answer: 1 },
+  { q: "A zombie process is:", options: ["Waiting for I/O","Finished but still in process table","In ready queue","Orphan process"], answer: 1 }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function loadQuestion() {
+  document.getElementById("result").innerHTML = "";
+  let q = quizData[currentQuestion];
+  document.getElementById("question").innerText = (currentQuestion+1) + ". " + q.q;
+  let optionsHtml = "";
+  q.options.forEach((opt, idx) => {
+    optionsHtml += `<div class='option'><label><input type='radio' name='option' value='${idx}'> ${opt}</label></div>`;
+  });
+  document.getElementById("options").innerHTML = optionsHtml;
+}
+
+function nextQuestion() {
+  let selected = document.querySelector('input[name="option"]:checked');
+  if (!selected) {
+    alert("Please select an answer");
+    return;
+  }
+  let answer = parseInt(selected.value);
+  if (answer === quizData[currentQuestion].answer) {
+    score++;
+    document.getElementById("result").innerHTML = "✅ Correct!";
+  } else {
+    document.getElementById("result").innerHTML = "❌ Wrong! Correct answer: " + quizData[currentQuestion].options[quizData[currentQuestion].answer];
+  }
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    setTimeout(loadQuestion, 1000);
+  } else {
+    setTimeout(showFinalScore, 1000);
+  }
+}
+
+function showFinalScore() {
+  document.getElementById("quiz-container").innerHTML = `<h3>Quiz Completed!</h3><p>Your Score: ${score} / ${quizData.length}</p>`;
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
